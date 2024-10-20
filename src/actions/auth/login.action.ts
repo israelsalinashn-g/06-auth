@@ -1,5 +1,6 @@
 import { firebase } from '@/firebase/config';
-import { defineAction, z } from 'astro:actions';
+import { defineAction } from 'astro:actions';
+import { z } from "astro:content";
 import { signInWithEmailAndPassword, type AuthError } from 'firebase/auth';
 
 export const loginUser = defineAction({

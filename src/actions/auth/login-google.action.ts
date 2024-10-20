@@ -1,5 +1,6 @@
 import { firebase } from '@/firebase/config';
-import { defineAction, z } from 'astro:actions';
+import { defineAction } from 'astro:actions';
+import { z } from "astro:content";
 import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
 
 export const loginWithGoogle = defineAction({

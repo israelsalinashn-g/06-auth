@@ -1,7 +1,7 @@
 ---
-import AuthLayout from '@/layouts/AuthLayout.astro';
+import AuthLayout from "@/layouts/AuthLayout.astro";
 
-const email = Astro.cookies.get('email')?.value ?? '';
+const email = Astro.cookies.get("email")?.value ?? "";
 const rememberMe = !!email;
 ---
 
@@ -94,38 +94,38 @@ const rememberMe = !!email;
 </AuthLayout>
 
 <script>
-  import { firebase } from '@/firebase/config';
-  import { actions } from 'astro:actions';
-  import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
-  import Swal from 'sweetalert2';
+  import { firebase } from "@/firebase/config";
+  import { actions } from "astro:actions";
+  import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+  import Swal from "sweetalert2";
 
-  const form = document.querySelector('form') as HTMLFormElement;
-  const btnSubmit = document.querySelector('#btn-submit') as HTMLButtonElement;
-  const bntGoogle = document.querySelector('#btn-google') as HTMLButtonElement;
+  const form = document.querySelector("form") as HTMLFormElement;
+  const btnSubmit = document.querySelector("#btn-submit") as HTMLButtonElement;
+  const bntGoogle = document.querySelector("#btn-google") as HTMLButtonElement;
 
-  form.addEventListener('submit', async (e) => {
+  form.addEventListener("submit", async (e) => {
     e.preventDefault();
-    btnSubmit.setAttribute('disabled', 'disabled');
+    btnSubmit.setAttribute("disabled", "disabled");
 
     const formData = new FormData(form);
 
-    const { error } = await actions.loginUser.safe(formData);
+    const { error } = await actions.loginUser(formData);
 
     if (error) {
       Swal.fire({
-        icon: 'error',
-        title: 'Error al ingresar',
+        icon: "error",
+        title: "Error al ingresar",
         text: error.message,
       });
-      btnSubmit.removeAttribute('disabled');
+      btnSubmit.removeAttribute("disabled");
       return;
     }
 
-    window.location.replace('/protected');
+    window.location.replace("/protected");
   });
 
-  bntGoogle.addEventListener('click', async () => {
-    bntGoogle.setAttribute('disabled', 'disabled');
+  bntGoogle.addEventListener("click", async () => {
+    bntGoogle.setAttribute("disabled", "disabled");
     const provider = new GoogleAuthProvider();
 
     try {
@@ -133,19 +133,19 @@ const rememberMe = !!email;
       const credentials = await signInWithPopup(firebase.auth, provider);
 
       // Paso 2: Vericar las credenciales en el backend
-      const { error } = await actions.loginWithGoogle.safe(credentials);
+      const { error } = await actions.loginWithGoogle(credentials);
 
       if (error) {
         alert(error.message);
-        bntGoogle.removeAttribute('disabled');
+        bntGoogle.removeAttribute("disabled");
         return;
       }
 
-      bntGoogle.innerText = 'Redireccionando...';
-      window.location.replace('/protected');
+      bntGoogle.innerText = "Redireccionando...";
+      window.location.replace("/protected");
     } catch (error) {
       console.log(error);
-      bntGoogle.removeAttribute('disabled');
+      bntGoogle.removeAttribute("disabled");
     }
   });
 </script>
